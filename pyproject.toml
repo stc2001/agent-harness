@@ -30,6 +30,7 @@ include = ["harness*"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 pythonpath = ["."]
+addopts = "--cov=harness --cov-report=term-missing --cov-fail-under=60"
 
 [tool.ruff]
 line-length = 100
