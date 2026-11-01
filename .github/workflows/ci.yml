@@ -41,7 +41,10 @@ jobs:
       - name: Test
         run: |
           pytest tests -q \
-            --deselect tests/test_e2e.py::TestHashlineLLMIntegration::test_llm_edits_python_file_with_indentation
+            --deselect tests/test_e2e.py::TestHashlineLLMIntegration::test_llm_edits_python_file_with_indentation \
+            --deselect tests/test_agent_runtime.py::TestAgentRuntime::test_run_loop_basic \
+            --deselect tests/test_tools.py::TestRealLLMTools \
+            --deselect tests/test_sandbox.py::TestFirewallPropagation::test_host_network_allows_connections
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4

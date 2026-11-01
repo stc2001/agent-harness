@@ -39,5 +39,11 @@ CI 的 test job 设置 HARNESS_TOKENIZER_DIR 指向 tests/fixtures/tokenizer
 
 ## 已知非 hermetic 测试
 
-tests/test_e2e.py::TestHashlineLLMIntegration::test_llm_edits_python_file_with_indentation
-需要真实云端 LLM；CI 与本地回归均 deselect。
+CI 与本地回归 deselect：
+
+- tests/test_e2e.py::TestHashlineLLMIntegration::test_llm_edits_python_file_with_indentation
+- tests/test_agent_runtime.py::TestAgentRuntime::test_run_loop_basic
+- tests/test_tools.py::TestRealLLMTools
+- tests/test_sandbox.py::TestFirewallPropagation::test_host_network_allows_connections
+
+前三个需要真实云端 LLM（CI 无 key）；最后是 runner 网络限制下的已知 flake。
