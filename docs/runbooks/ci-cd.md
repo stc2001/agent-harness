@@ -29,6 +29,14 @@ CI 先强制 E9（语法）与 F821（未定义名）。清理完成后可扩大
 - versioning-strategy: increase-if-necessary：只在当前约束无法满足时才抬高下限，
   避免把 >= 依赖的最小版本无条件抬到最新（含大版本）。
 
+## Hermetic tokenizer
+
+CI 的 test job 设置 HARNESS_TOKENIZER_DIR 指向 tests/fixtures/tokenizer
+（内含最小 byte-level tokenizer.json）。本机没有 tokenizer_dir/ 时也可用同样方式
+让测试脱离真实 model 文件：
+
+    HARNESS_TOKENIZER_DIR=$PWD/tests/fixtures/tokenizer pytest tests -q
+
 ## 已知非 hermetic 测试
 
 tests/test_e2e.py::TestHashlineLLMIntegration::test_llm_edits_python_file_with_indentation

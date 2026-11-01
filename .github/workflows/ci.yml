@@ -17,6 +17,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      HARNESS_TOKENIZER_DIR: ${{ github.workspace }}/tests/fixtures/tokenizer
     strategy:
       fail-fast: false
       matrix:

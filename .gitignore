@@ -13,7 +13,7 @@ OH_workspace_ML
 app/results/
 app/.harness
 results/
-tokenizer_dir/
+/tokenizer_dir/
 app/.agent_venv/
 opencode.jsonc
 session_key
@@ -47,3 +47,7 @@ docs/harness_doc/deepseek_keys_for_test
 id_rsa*
 id_ed25519*
 credentials.json
+
+# test / coverage artifacts
+.coverage
+coverage.xml
