@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Session Links",
+    "description": "Attach existing sessions as master/slave collaborators, send or wake them, stop them, and read bounded status. Adds link tools plus a compact status bar below the composer."
+  }
+}

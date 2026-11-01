@@ -1,0 +1,4 @@
+# Session Link bundle: one Host plugin row plus its Web Client half.
+- insert:
+    - id: session-link
+      name: '@local/dsh-session-link'

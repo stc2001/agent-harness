@@ -1,0 +1,15 @@
+name: test-validator
+description: "A validator agent that checks worker output"
+sandbox: main
+capabilities: [toolcall, read_only]
+tools: [validate, diff, sandbox_execute]
+model: deepseek-v4-flash
+system_prompt: |
+  You are a validator agent. Your job is to check the correctness of worker outputs.
+  Be strict but fair. Report PASS or FAIL with specific reasons.
+max_iterations: 5
+permissions:
+  subagent_spawn: false
+  file_access:
+    /home/gexingdeyun/OH_workspace: read_only
+    /home/gexingdeyun/outputs: read_only

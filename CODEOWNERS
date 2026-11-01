@@ -1,0 +1,12 @@
+# CODEOWNERS (soft-serve convention file)
+# soft-serve does not parse this file. It records the expected reviewer mapping
+# so humans and agents agree on who reviews what. Keep it in sync with
+# CONTRIBUTING.md.
+
+*                       @gexingdeyun
+/harness/               @gexingdeyun
+/.dsh/                  @gexingdeyun
+/docs/                  @gexingdeyun
+/scripts/               @gexingdeyun
+/issues/                @gexingdeyun
+/merge-requests/        @gexingdeyun

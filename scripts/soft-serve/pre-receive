@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+#
+# Soft Serve global pre-receive policy hook — "issue first, then merge request".
+#
+# Installed at:  <SOFT_SERVE_DATA_PATH>/hooks/pre-receive
+# Soft Serve copies global hooks into every repository's pre-receive.d/ and runs
+# them on each push. A non-zero exit rejects the whole push.
+#
+# POLICY for the protected default branch (refs/heads/main):
+#   1. Deleting main                -> DENIED
+#   2. Creating main (first time)   -> ALLOWED
+#   3. Non-fast-forward (force)     -> DENIED  (published history is immutable)
+#   4. Otherwise the push is ALLOWED only if EVERY commit on the *first-parent*
+#      chain from oldrev to newrev is either
+#        a) a merge commit (>=2 parents)  -> an approved MR landing, or
+#        b) tracker-only                  -> issues/** or merge-requests/** edits
+#      Anything else on that chain is a direct code push and is DENIED.
+#
+# Why the first-parent chain: commits that arrive *through* a merge (i.e. the MR
+# branch's own commits) are not on main's first-parent chain, so a merged MR is
+# judged by its merge commit alone. This also means "merge + close-the-issue"
+# can be one push, while a code commit pushed straight to main cannot hide.
+#
+# Every other branch is pushable, so `mr/<ID>-<slug>` branches work normally.
+# Set SOFT_SERVE_POLICY_STRICT=1 to additionally reject non-`mr/*` branch names.
+#
+# Break-glass (documented runbook): rename this file to disable the policy, e.g.
+#   mv .../hooks/pre-receive .../hooks/pre-receive.disabled
+# The next push then succeeds. This is intentionally a filesystem action rather
+# than a push-time bypass, so the policy cannot be bypassed from a git client.
+
+set -uo pipefail
+
+PROTECTED_REF="refs/heads/main"
+ZERO="0000000000000000000000000000000000000000"
+STRICT="${SOFT_SERVE_POLICY_STRICT:-0}"
+
+AUDIT_LOG="${SOFT_SERVE_DATA_PATH:-.}/log/push-audit.log"
+USER_NAME="${SOFT_SERVE_USERNAME:-unknown}"
+REPO_NAME="${SOFT_SERVE_REPO_NAME:-unknown}"
+STAMP="$(date '+%Y-%m-%d %H:%M:%S%z')"
+
+audit() {
+  # $1=ref $2=old $3=new $4=decision $5=reason
+  printf '%s\tuser=%s\trepo=%s\tref=%s\told=%s\tnew=%s\t%s\t%s\n' \
+    "$STAMP" "$USER_NAME" "$REPO_NAME" "$1" "$2" "$3" "$4" "$5" \
+    >>"$AUDIT_LOG" 2>/dev/null || true
+}
+
+reject=0
+
+# `git rev-list --parents -n 1 <sha>` prints the commit followed by one token per
+# parent, so >=3 tokens means it is a merge commit.
+is_merge_commit() {
+  local n
+  n="$(git rev-list --parents -n 1 "$1" 2>/dev/null | wc -w)"
+  [ "${n:-0}" -ge 3 ]
+}
+
+# True when the commit's own change (vs its first parent) is confined to the
+# tracker directories.
+commit_is_tracker_only() {
+  local changed
+  changed="$(git diff-tree --no-commit-id --name-only -r "$1" 2>/dev/null)"
+  [ -n "$changed" ] || return 1
+  # grep -qv exits 0 when at least one path is outside the tracker dirs
+  if printf '%s\n' "$changed" | grep -qvE '^(issues|merge-requests)/'; then
+    return 1
+  fi
+  return 0
+}
+
+while read -r oldrev newrev refname; do
+  [ -z "${refname:-}" ] && continue
+
+  if [ "$refname" != "$PROTECTED_REF" ]; then
+    # Non-protected branch: allowed. Optionally enforce the mr/* naming.
+    if [ "$STRICT" = "1" ] && [ "$refname" != "${refname#refs/heads/}" ]; then
+      case "${refname#refs/heads/}" in
+        mr/*) : ;;
+        *)
+          echo "policy: 分支 '${refname#refs/heads/}' 不符合 mr/<ID>-<slug> 命名约定（STRICT=1）" >&2
+          audit "$refname" "$oldrev" "$newrev" DENY "non-mr branch name (strict)"
+          reject=1
+          ;;
+      esac
+    fi
+    continue
+  fi
+
+  # --- protected branch ---
+  if [ "$newrev" = "$ZERO" ]; then
+    echo "policy: 拒绝删除 $PROTECTED_REF" >&2
+    audit "$refname" "$oldrev" "$newrev" DENY "delete protected branch"
+    reject=1
+    continue
+  fi
+
+  if [ "$oldrev" = "$ZERO" ]; then
+    audit "$refname" "$oldrev" "$newrev" ALLOW "create protected branch"
+    continue
+  fi
+
+  if ! git merge-base --is-ancestor "$oldrev" "$newrev" 2>/dev/null; then
+    echo "policy: 拒绝对 $PROTECTED_REF 的非快进（force）推送——已发布历史不可改写" >&2
+    audit "$refname" "$oldrev" "$newrev" DENY "non-fast-forward push to main"
+    reject=1
+    continue
+  fi
+
+  # Walk main's first-parent chain; every commit on it must be merge or tracker-only.
+  bad_commits=""
+  merges=0
+  while read -r c; do
+    [ -z "$c" ] && continue
+    if is_merge_commit "$c"; then
+      merges=$((merges + 1))
+      continue
+    fi
+    if commit_is_tracker_only "$c"; then
+      continue
+    fi
+    bad_commits="${bad_commits}${c}"$'\n'
+  done < <(git rev-list --first-parent "$oldrev..$newrev" 2>/dev/null)
+
+  if [ -z "$bad_commits" ]; then
+    if [ "$merges" -gt 0 ]; then
+      audit "$refname" "$oldrev" "$newrev" ALLOW "merge commit landing"
+    else
+      audit "$refname" "$oldrev" "$newrev" ALLOW "tracker-only change"
+    fi
+    continue
+  fi
+
+  cat >&2 <<EOF
+policy: 拒绝直接推送 main（${oldrev:0:8} -> ${newrev:0:8}）
+
+  main 的每个提交（沿 first-parent 链）只能是：
+    1) 合并提交——merge 请求评审通过后合并产生
+    2) 只改 issues/** 或 merge-requests/** 的提交——tracker 登记/更新
+
+  推代码的正确流程：
+    git switch -c mr/<ID>-<slug>
+    git commit ...
+    git push origin mr/<ID>-<slug>
+    # 评审通过后在本地合并：
+    git switch main && git merge --no-ff mr/<ID>-<slug>
+    git push origin main
+
+  被拒的提交：
+$(printf '%s' "$bad_commits" | while read -r c; do
+    [ -z "$c" ] && continue
+    printf '    %s %s\n' "$(git log -1 --format='%h' "$c")" "$(git log -1 --format='%s' "$c")"
+  done)
+
+  其中非 tracker 文件：
+$(printf '%s\n' $bad_commits | while read -r c; do
+    [ -z "$c" ] && continue
+    git diff-tree --no-commit-id --name-only -r "$c" 2>/dev/null
+  done | sort -u | sed 's/^/    /')
+EOF
+  audit "$refname" "$oldrev" "$newrev" DENY "direct push to main"
+  reject=1
+done
+
+[ "$reject" -eq 0 ] || exit 1
+exit 0

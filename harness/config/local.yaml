@@ -1,0 +1,11 @@
+# Agent Harness — local configuration
+# Environment variables (HARNESS_DEEPSEEK_API_KEY etc.) override these values.
+# This file is the default bootstrap for HarnessClient().
+
+deepseek_api_key: ""
+base_url: "https://api.deepseek.com/v1"
+hmac_secret: "mvp-dev-secret-change-in-production"
+default_backend: "bubblewrap"
+sessions_dir: "./sessions/"
+audit_log_dir: "./sessions/"
+audit_enabled: true

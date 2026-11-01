@@ -1,0 +1,9 @@
+{
+    "python.testing.pytestArgs": [
+        "tests",
+        "-q"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.defaultInterpreterPath": "/home/gexingdeyun/OH_workspace/.venv/bin/python"
+}

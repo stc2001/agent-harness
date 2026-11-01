@@ -1,0 +1,14 @@
+# End-to-end test job: simple single-phase, single-node execution
+job_id: e2e-test-job
+phases:
+  - name: test-phase
+    nodes:
+      - id: execute
+        agent: test-worker
+        depends_on: []
+        config:
+          env_vars: {}
+    human_gate: false
+metadata:
+  test: true
+  description: "End-to-end integration test"

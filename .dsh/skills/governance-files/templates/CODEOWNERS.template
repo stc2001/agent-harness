@@ -1,0 +1,11 @@
+# CODEOWNERS (soft-serve convention file)
+# soft-serve does not parse this file. It records expected reviewers so the
+# same mapping is visible to humans and agents. Keep it in sync with
+# CONTRIBUTING.md.
+
+*                       @<primary-maintainer>
+/harness/               @<framework-maintainer>
+/pi/                    @<app-maintainer>
+/.dsh/                  @<agent-tooling-maintainer>
+/docs/                  @<docs-maintainer>
+/scripts/               @<tooling-maintainer>

@@ -1,0 +1,16 @@
+name: test-worker
+description: "A simple worker agent for testing"
+sandbox: main
+capabilities: [toolcall]
+tools: [echo, sum, sandbox_execute, spawn_subagent]
+model: deepseek-v4-flash
+system_prompt: |
+  You are a test worker agent. You execute tasks precisely and report results.
+  Current time: {time}. Priority: {priority}.
+  When asked to compute, respond with the answer only.
+max_iterations: 3
+permissions:
+  subagent_spawn: false
+  file_access:
+    /home/gexingdeyun/OH_workspace: read_write
+    /home/gexingdeyun/outputs: read_write

@@ -1,0 +1,25 @@
+# Contributing
+
+## Workflow
+
+1. Open an issue file issues/I-NN-slug.md (copy issues/TEMPLATE.md). Labels come
+   from docs/agents/triage-labels.md.
+2. Branch from main: mr/I-NN-slug.
+3. Commit with the issue id in the subject: <type>(<scope>): I-NN <summary>.
+4. Push the branch: git push -u origin mr/I-NN-slug.
+5. Record the MR in merge-requests/I-NN.md and request review.
+6. After approval, merge with --no-ff and update the record (head, merged_as).
+
+## Rules
+
+- main is protected: only merge commits and tracker-only commits (issues/,
+  merge-requests/) are accepted by the server.
+- Never force-push main; never rewrite reviewed MR history.
+- Tests: make test (or the focused pytest nodes) must pass before review.
+- Do not commit secrets, large files, .soft-serve/, sessions/, or .scratch/.
+
+## Local setup
+
+    python3 -m venv .venv
+    .venv/bin/pip install -e ".[dev]"
+    make test

@@ -1,0 +1,180 @@
+[
+  {
+    "index": 0,
+    "system": "You are an AI agent powered by DeepSeek Harness.\n\nstable base",
+    "tools": [
+      "echo"
+    ],
+    "messages": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "hi"
+          }
+        ],
+        "source": {
+          "kind": "user"
+        },
+        "role": "user",
+        "id": "044b7ece-2012-405c-b32d-2040f8ac48c4"
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "system": "You are an AI agent powered by DeepSeek Harness.\n\nstable base",
+    "tools": [
+      "echo"
+    ],
+    "messages": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "hi"
+          }
+        ],
+        "source": {
+          "kind": "user"
+        },
+        "role": "user",
+        "id": "044b7ece-2012-405c-b32d-2040f8ac48c4"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "let me echo"
+          },
+          {
+            "type": "tool-call",
+            "id": "c1",
+            "name": "echo",
+            "arguments": "{\"text\":\"one\"}"
+          }
+        ],
+        "source": {
+          "kind": "model",
+          "provider": "mock",
+          "model": "mock"
+        },
+        "id": "9a5c3b6e-a4d1-42e8-a690-aa09d5da888f"
+      },
+      {
+        "source": {
+          "kind": "tool",
+          "callId": "c1"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "c1",
+            "content": [
+              {
+                "type": "text",
+                "text": "echo: one"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "role": "user",
+        "id": "eaee91f4-8cd3-4c85-a22e-1adadf6ef82b"
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "system": "You are an AI agent powered by DeepSeek Harness.\n\nstable base",
+    "tools": [
+      "echo"
+    ],
+    "messages": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "hi"
+          }
+        ],
+        "source": {
+          "kind": "user"
+        },
+        "role": "user",
+        "id": "044b7ece-2012-405c-b32d-2040f8ac48c4"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "let me echo"
+          },
+          {
+            "type": "tool-call",
+            "id": "c1",
+            "name": "echo",
+            "arguments": "{\"text\":\"one\"}"
+          }
+        ],
+        "source": {
+          "kind": "model",
+          "provider": "mock",
+          "model": "mock"
+        },
+        "id": "9a5c3b6e-a4d1-42e8-a690-aa09d5da888f"
+      },
+      {
+        "source": {
+          "kind": "tool",
+          "callId": "c1"
+        },
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "c1",
+            "content": [
+              {
+                "type": "text",
+                "text": "echo: one"
+              }
+            ],
+            "isError": false
+          }
+        ],
+        "role": "user",
+        "id": "eaee91f4-8cd3-4c85-a22e-1adadf6ef82b"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "done one"
+          }
+        ],
+        "source": {
+          "kind": "model",
+          "provider": "mock",
+          "model": "mock"
+        },
+        "id": "0038b6a7-50b2-48e7-81a5-3620b4243815"
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "second turn"
+          }
+        ],
+        "source": {
+          "kind": "user"
+        },
+        "role": "user",
+        "id": "1e877647-4a54-420c-92b8-2ffab3cec8b4"
+      }
+    ]
+  }
+]

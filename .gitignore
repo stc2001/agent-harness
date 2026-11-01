@@ -1,0 +1,49 @@
+bin/uv
+bin/uvx
+diary/
+*.pyc
+sessions/
+app/deepseek_keys_for_test
+docs/reference_research_paper/kimi_k25_report.pdf
+registry/
+agent_harness.egg-info/
+OH_workspace_ML
+.opencode
+.codegraph
+app/results/
+app/.harness
+results/
+tokenizer_dir/
+app/.agent_venv/
+opencode.jsonc
+session_key
+appimg/
+.dsh/appimg/
+tile-rwkv/
+# 参考用外部仓库（独立 git 仓库，不纳入版本控制）
+deepseek-harness/
+education-agent-skills/
+examples/.keys/
+examples/llm_bash_roundtrip/ws/
+examples/llm_bash_roundtrip/home/
+examples/llm_bash_roundtrip/.keys/
+# 本地 soft-serve git server（二进制/数据/审计日志/SSH 私钥），绝不可入库
+.soft-serve/
+soft-serve_*_Linux_x86_64.tar.gz
+# 本地草稿/测试日志/临时脚本（不入库）
+.scratch/
+# 本地 git hooks（pre-push 护栏，按用户要求不入库）
+.githooks/
+# 隐私/凭据：本地密钥文件保留在磁盘，但绝不进 git
+docs/harness_doc/deepseek_keys_for_test
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+id_ed25519*
+credentials.json

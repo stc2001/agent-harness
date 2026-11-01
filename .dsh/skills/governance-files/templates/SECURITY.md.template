@@ -1,0 +1,18 @@
+# Security Policy
+
+## Reporting
+
+Do not open a public issue for a vulnerability. Report privately to
+<SECURITY_CONTACT> with steps to reproduce and impact.
+
+## Supported scope
+
+- Latest release on main: <VERSION_OR_DATE>
+- Reports about third-party dependencies: include the package and version.
+
+## Rules for contributors
+
+- Never commit credentials, tokens, keys, or .env files.
+- Rotate any leaked credential first, then coordinate history cleanup with the
+  maintainers.
+- Do not paste secrets into issues, MRs, or chat; use a placeholder.

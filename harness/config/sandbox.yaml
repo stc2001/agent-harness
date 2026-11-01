@@ -1,0 +1,32 @@
+# 沙箱实例定义——与 Agent Spec 解耦
+# 多个 Agent 可共享同一个命名的沙箱实例
+# 文件读写控制由 AgentRuntime 按 Agent Spec 权限做路径拦截
+
+sandboxes:
+  main:
+    backend: bubblewrap
+    firewall:
+      network: "host"
+    shared_folders:
+      - host_path: "/home/gexingdeyun/OH_workspace"
+        sandbox_path: "/workspace"
+      - host_path: "/home/gexingdeyun/outputs"
+        sandbox_path: "/outputs"
+    ttl_seconds: 3600
+    idle_timeout: 0
+
+  airgapped:
+    backend: bubblewrap
+    firewall:
+      network: "none"
+    shared_folders: []
+
+  docker-dev:
+    backend: docker
+    firewall:
+      network: "none"
+    shared_folders: []
+    image: ""
+    cpu_limit: ""
+    memory_limit: ""
+    network: ""
