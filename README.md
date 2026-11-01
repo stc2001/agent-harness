@@ -1,5 +1,7 @@
 # Agent Harness（内核）
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/stc2001/agent-harness)
+
 > 单机本地 Agent 基础设施 —— 沙箱隔离、统一授权、可审计、可重现
 
 本仓库只包含 harness **内核**（kernel）。上层应用 pi（pi-mode CLI、记忆压缩、
