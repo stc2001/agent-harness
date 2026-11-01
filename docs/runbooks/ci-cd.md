@@ -47,3 +47,10 @@ CI 与本地回归 deselect：
 - tests/test_sandbox.py::TestFirewallPropagation::test_host_network_allows_connections
 
 前三个需要真实云端 LLM（CI 无 key）；最后是 runner 网络限制下的已知 flake。
+
+另外排除环境相关用例：
+
+- tests/test_i33_execguard_feas.py（依赖 bwrap 内 /workspace/guard 等构建产物）
+- Python 3.11：tests/test_i34_execguard.py 与
+  tests/test_policy_cedar.py::test_guard_to_kernel_end_to_end
+  （mephi42-seccomp 无 cp311 发行包；3.13 才安装 seccomp）

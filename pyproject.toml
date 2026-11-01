@@ -22,7 +22,7 @@ dev = [
     "ruff>=0.5",
     "transformers>=4.40",
     "cedarpy>=4.8.7",
-    "mephi42-seccomp>=2.5.6",
+    "mephi42-seccomp>=2.5.6; python_version >= '3.13'",
 ]
 
 local = [
