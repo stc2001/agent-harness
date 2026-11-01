@@ -13,13 +13,14 @@ import json
 import time
 import uuid
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Callable, Iterator
 
 from harness.agent_spec.impl import AgentSpecService
 from harness.audit_log import AuditLog
 from harness.gateway.gateway import Gateway
 from harness.interfaces import (
     Event,
+    SandboxConfig,
     SessionNotFoundError,
 )
 from harness.policy import engine as _policy_engine

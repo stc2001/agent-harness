@@ -8,6 +8,7 @@ harness 内核文档地图。app 层（pi）文档在独立仓库 ../pi-app。
 | agents/ | agent 协作约定：domain / issue-tracker / triage-labels / human-review-tracker |
 | sop/ | soft-serve issue/MR 工作流、并发排查、测试策略 |
 | plan(s)/ | 设计与重构计划（含 repo-split-plan） |
+| runbooks/ | GitHub 发布（fast-forward 追加）与 CI/CD 说明 |
 | archive/ | 历史归档：TODO 旧文档、已解决的问题清单、被取代的设计计划 |
 | evidence/ | ADR/issue 引用的实测证据 |
 | reference_research_paper/ | 外部研究资料 |

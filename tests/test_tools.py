@@ -17,7 +17,7 @@ from tests.conftest import register_test_tools
 
 
 @pytest.fixture
-def gateway() -> CapTokenService:
+def gateway() -> Gateway:
     return Gateway(event_bus=None)
 
 
