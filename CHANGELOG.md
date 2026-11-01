@@ -33,6 +33,8 @@
 - 仓库拆分：pi 应用层移出本仓库，独立为同级 pi-app 仓库（I-91，2026-11-01）。
 - CI/CD：新增 GitHub Actions 测试矩阵（Python 3.11/3.13）与 Release 工作流；
   Dependabot 改为 increase-if-necessary 分组更新（I-95）。
+- AGENTS.md 重写为项目专用 agent 操作手册（环境、测试、issue/MR、main 保护、
+  GitHub 发布规则；I-102）。
 
 ### Fixed
 
